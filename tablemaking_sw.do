@@ -2,7 +2,6 @@
 // Project: Table making .do walkthrough
 // Author: Seth Watts
 *************************************************************
-global prac "/Users/sethwatts/Dropbox (ASU)/MAIN/All purpose .do files"
 
 // **** set a global for yourself so you can call it in the table commands - if you don't set a global I will think less of you (if that means anything to you) :)
 
