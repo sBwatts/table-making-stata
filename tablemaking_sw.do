@@ -5,6 +5,13 @@
 
 // **** set a global for yourself so you can call it in the table commands - if you don't set a global I will think less of you (if that means anything to you) :)
 
+global 'name path' "path"
+
+Ex: global s "users/folder/folder2"
+// this means you are working out of folder2 (your data is there, tables, figures, etc.)
+
+// then when you call the global in the command you will use '$name path' so for the example above $s
+
 **# example data
 // file -> example datasets -> example datasets in stata
 sysuse auto.dta, clear
@@ -79,4 +86,8 @@ outreg2 using "$prac/outreg_prac1.xls", dec(3) alpha(0.05, 0.01) symbol(*,**) ap
 // the best way to use outreg2 is to export to xls file, then create a table shell in a separate excel file to then copy your results into. That way you have an unedited export file that you can edit only through your stata commands and a file you edit for table formatting purposes
 
 // Personally, I have come to enjoy the estout command suite for all table making purposes. (1) It's very flexible, (2) it can provide tables for anything, (3) can export to rtf, csv, tex files, and (4) you can preview in stata. It does have a slightly steeper learning curve than the other commands but it produces some nice tables!
+
+**# reminders
+// 'help command' is your best friend, as is googling the command you are struggling with.
+// I will be adding to this do file over time, so thjings may change and commands will be added
 
