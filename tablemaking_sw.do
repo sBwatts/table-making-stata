@@ -2,8 +2,12 @@
 // Project: Table making .do walkthrough
 // Author: Seth Watts
 *************************************************************
+**# packages
+ssc install estout
+net install desctable, from("https://tdmize.github.io/data/desctable")
+ssc install outreg2
 
-// **** set a global for yourself so you can call it in the table commands - if you don't set a global I will think less of you (if that means anything to you) :)
+**** set a global for yourself so you can call it in the table commands - if you don't set a global I will think less of you (if that means anything to you) :)
 
 global 'name path' "path"
 
@@ -48,7 +52,6 @@ esttab, main(mean) aux(sd) nostar unstack ///
 **# desctable command
 // resource: https://www.trentonmize.com/software/desctable
 // admittedly, I'm less familiar with this command but here we go
-net install desctable, from("https://tdmize.github.io/data/desctable")
 
 desctable price foreign mpg trunk, ///
 	filename($prac/desctable_prac1)
