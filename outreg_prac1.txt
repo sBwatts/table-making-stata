@@ -1,0 +1,18 @@
+	(1)	(2)
+VARIABLES	Price	price
+		
+foreign	1,887.461*	3,711.123*
+	(711.416)	(683.821)
+mpg	-261.989*	15.394
+	(64.913)	(74.341)
+trunk	83.646	-87.015
+	(86.501)	(79.047)
+weight		3.761*
+		(0.685)
+Constant	10,033.080*	-5,425.547
+	(2,256.685)	(3,394.248)
+		
+Observations	74	74
+R-squared	0.293	0.508
+Standard errors in parentheses		
+* p<0.05, ** p<0.01		

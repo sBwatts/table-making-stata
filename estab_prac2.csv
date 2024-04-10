@@ -1,0 +1,21 @@
+="Table 2. OLS regression model"
+
+="",="Price"
+
+="Car origin",="1887.461***"
+="",="(711.416)"
+
+="Mileage (mpg)",="-261.989***"
+="",="(64.913)"
+
+="Trunk space (cu. ft.)",="83.646"
+="",="(86.501)"
+
+="Constant",="10033.080***"
+="",="(2256.685)"
+
+="Observations",="74"
+="R-squared",="0.293"
+
+="Standard errors in parentheses"
+="* p<0.10, ** p<0.05, *** p<0.01"
