@@ -121,6 +121,14 @@ estout m1, cells(b(star fmt(3)) se(par fmt(2)) p(fmt (3))) /* estimates stacked,
 estout *, cells(b(star fmt(%9.3f)) se(par)) ///    
 	stats(r2_a N, fmt(%9.3f %9.0g) labels(R-squared))    ///  
 	legend label collabels(none) varlabels(_cons Constant)
+	
+// example with multiple models
+reg price foreign mpg trunk weight
+estimates store m2
+
+estout m1 m2, cells(b(star fmt(%9.3f)) se(par)) ///    
+	stats(r2_a N, fmt(%9.3f %9.0g) labels(R-squared))    ///  
+	legend label collabels(none) varlabels(_cons Constant)
 
 
 **# outreg2 command
@@ -138,5 +146,5 @@ outreg2 using "$prac/outreg_prac1.xls", dec(3) alpha(0.05, 0.01) symbol(*,**) ap
 
 **# reminders
 // 'help command' is your best friend, as is googling the command you are struggling with.
-// I will be adding to this do file over time, so thjings may change and commands will be added
+// I will be adding to this do file over time, so things may change and commands will be added
 
