@@ -7,18 +7,31 @@ ssc install estout
 net install desctable, from("https://tdmize.github.io/data/desctable")
 ssc install outreg2
 
-**** set a global for yourself so you can call it in the table commands - if you don't set a global I will think less of you (if that means anything to you) :)
+**** set a global for yourself so you can call it in the table commands - if you don't set a global I will think less of you (just kidding..) :)
 
 global 'name path' "path"
 
-Ex: global s "users/folder/folder2"
-// this means you are working out of folder2 (your data is there, tables, figures, etc.)
+MAC Ex: global s "user/folder/folder2"
+WINDOWS Ex: global s "user\folder\folder2"
+
+// this means you are working out of folder2 (your data is there, tables, figures, etc.) 
 
 // then when you call the global in the command you will use '$name path' so for the example above $s
+
+// or you can have separate globals, one for figures, one for tables, one with data... EX:
+
+global data "user/folder/folder2"
+global tables "user/folder/folder3"
+global figures "user/folder/folder4"
+
+// this way you will need to recall which global is which when you write to it later in the code
 
 **# example data
 // file -> example datasets -> example datasets in stata
 sysuse auto.dta, clear
+
+// we will be using the following variables 
+sum price foreign mpg trunk 
 
 **# descriptive stats and tables
 **# estout command suite
@@ -26,7 +39,10 @@ sysuse auto.dta, clear
 // resource: https://repec.sowi.unibe.ch/stata/estout/
 
 est clear // clears previous stored estimates
-estpost sum price foreign mpg trunk
+estpost sum price foreign mpg trunk 
+
+/* estpost posts the results of 'sum vars' to the stored estimates */
+/* esttab provides the formatted table of the previously stored estimates, and it allows you to visualize in stata -- you also can export using this command with 'using file' */
 
 // word export
 esttab using "$prac/estab_prac1.rtf", replace ///
@@ -37,6 +53,13 @@ esttab using "$prac/estab_prac1.rtf", replace ///
 esttab using "$prac/estab_prac1.csv", replace ///
 	cells("mean(fmt(%6.2fc)) sd(fmt(%6.2fc)) min max") noobs nostar nonote nonumber label ///
 	title("Table 1. Summary Statistics")
+	
+	
+// calling reference categories/headers are also nice
+esttab, cells("mean(fmt(%6.2fc)) sd(fmt(%6.2fc)) min max") noobs nostar nonote nonumber label ///
+	title("Table 1. Summary Statistics") refcat(price "Dependent Variable" foreign "Independent Variable" mpg "Controls", nolabel) 
+	
+// note that you call the variable that you want the subsequent header to go above. The no label command ensures the ref category/header does not have a row of data
 	
 // there is a lot of flexbibility in this command suite --- too much to go through here: for instance, take away 'nonote' add 'addnote(n = #)', you can alter the title in the command, the column headers, shift the presentation of the estimates (so say, mean over (sd)), you can also group the stats -- see below
 // also, as you can see below, it is nice because you can preview the table in stata before exporting it to an rtf, csv, or tex file
@@ -64,6 +87,13 @@ desctable price foreign mpg trunk, ///
 est clear
 eststo: reg price foreign mpg trunk
 
+/*eststo: is a way to store estimates it could also look like:
+
+reg price foreign mpg trunk
+eststo
+
+*/
+
 esttab, lab
 esttab, b(3) se(3) r2(3) /*limiting to 3 decimals*/ label /*var label*/ star(* 0.10 ** 0.05 *** 0.01) /*asterisks*/ nonumber /*no model #*/
 
@@ -76,6 +106,22 @@ esttab using "$prac/estab_prac2.rtf", replace ///
 esttab using "$prac/estab_prac2.csv", replace ///
 	b(3) se(3) r2(3) star(* 0.10 ** 0.05 *** 0.01) nonumber label ///
 	title("Table 2. OLS regression model")
+	
+// you can also call estout to provide your regression table
+
+reg price foreign mpg trunk
+estimates store m1
+
+estout m1, cells("b se p") stats(r2 N)
+
+estout m1, cells(b(star fmt(3)) se(par fmt(2)) p(fmt (3))) /* estimates stacked, se in parenttheses, p value below) */
+
+// more detailed example
+
+estout *, cells(b(star fmt(%9.3f)) se(par)) ///    
+	stats(r2_a N, fmt(%9.3f %9.0g) labels(R-squared))    ///  
+	legend label collabels(none) varlabels(_cons Constant)
+
 
 **# outreg2 command
 reg price foreign mpg trunk
