@@ -39,7 +39,7 @@ sum price foreign mpg trunk
 // resource: https://repec.sowi.unibe.ch/stata/estout/
 
 est clear // clears previous stored estimates
-estpost sum price foreign mpg trunk 
+estpost sum price foreign mpg trunk
 
 /* estpost posts the results of 'sum vars' to the stored estimates */
 /* esttab provides the formatted table of the previously stored estimates, and it allows you to visualize in stata -- you also can export using this command with 'using file' */
@@ -59,17 +59,17 @@ esttab using "$prac/estab_prac1.csv", replace ///
 esttab, cells("mean(fmt(%6.2fc)) sd(fmt(%6.2fc)) min max") noobs nostar nonote nonumber label ///
 	title("Table 1. Summary Statistics") refcat(price "Dependent Variable" foreign "Independent Variable" mpg "Controls", nolabel) 
 	
-// note that you call the variable that you want the subsequent header to go above. The no label command ensures the ref category/header does not have a row of data
+// note that you call the variable that you want the subsequent header to go above. The ', nolabel' option ensures the ref category/header does not have a row of data
 	
 // there is a lot of flexbibility in this command suite --- too much to go through here: for instance, take away 'nonote' add 'addnote(n = #)', you can alter the title in the command, the column headers, shift the presentation of the estimates (so say, mean over (sd)), you can also group the stats -- see below
 // also, as you can see below, it is nice because you can preview the table in stata before exporting it to an rtf, csv, or tex file
 
 est clear 
 estpost tabstat price mpg trunk, by(foreign) ///
-	statistics(mean sd) c(stats)
+	statistics(mean sd) c(stats) nototal /* no row total */
 	
 esttab, main(mean) aux(sd) nostar unstack ///
-	noobs nomtitle nonumber	addnote(n = 74) /*adds note under the table*/
+	noobs nomtitle nonumber addnote(n = 74) /*adds note under the table*/
 
 
 **# desctable command
@@ -142,7 +142,7 @@ outreg2 using "$prac/outreg_prac1.xls", dec(3) alpha(0.05, 0.01) symbol(*,**) ap
 
 // the best way to use outreg2 is to export to xls file, then create a table shell in a separate excel file to then copy your results into. That way you have an unedited export file that you can edit only through your stata commands and a file you edit for table formatting purposes
 
-// Personally, I have come to enjoy the estout command suite for all table making purposes. (1) It's very flexible, (2) it can provide tables for anything, (3) can export to rtf, csv, tex files, and (4) you can preview in stata. It does have a slightly steeper learning curve than the other commands but it produces some nice tables!
+// Personally, I have come to enjoy the estout command suite for all table making purposes. (1) It's very flexible, (2) it can provide tables for anything, (3) can export to rtf, csv, html, tex files, and (4) you can preview in stata. It does have a slightly steeper learning curve than the other commands but it produces some nice tables!
 
 **# reminders
 // 'help command' is your best friend, as is googling the command you are struggling with.
