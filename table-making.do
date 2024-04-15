@@ -186,5 +186,5 @@ outreg2 using "$prac/outreg_prac1.xls", dec(3) alpha(0.05, 0.01) symbol(*,**) ap
 **# reminders
 * 'help command' is your best friend, as is googling the command you are struggling with.
 * I will be adding to this do file over time, so things may change and commands will be added
-* There may be - quite likely actually - better more efficient ways to making tables. These are just approaches I have learned and adopted over the years that work for me.
+* There may be - quite likely actually - more efficient ways to making tables. These are just approaches I have learned and adopted over the years that work for me.
 
