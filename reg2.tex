@@ -1,0 +1,30 @@
+\begin{table}[htbp]\centering
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\caption{\centering OLS Regression Model}
+\begin{tabular}{l*{1}{c}}
+\toprule
+                &\multicolumn{1}{c}{\hspace{0.25cm} Price}\\
+\midrule
+\emph{Independent Variable}&                  \\
+\addlinespace
+\hspace{0.25cm} Car origin&  1887.46\sym{**} \\
+                & (711.42)         \\
+\addlinespace
+\vspace{0.1em} \emph{Control Variables}&                  \\
+\addlinespace
+\hspace{0.25cm} Mileage (mpg)&  -261.99\sym{***}\\
+                &  (64.91)         \\
+\addlinespace
+\hspace{0.25cm} Trunk space (cu. ft.)&    83.65         \\
+                &  (86.50)         \\
+\addlinespace
+Constant        & 10033.08\sym{***}\\
+                &(2256.68)         \\
+\midrule
+Observations    &       74         \\
+\(R^{2}\)       &    0.293         \\
+\bottomrule
+\multicolumn{2}{l}{\footnotesize Standard errors in parentheses}\\
+\multicolumn{2}{l}{\footnotesize \sym{*} \(p<0.05\), \sym{**} \(p<0.01\), \sym{***} \(p<0.001\)}\\
+\end{tabular}
+\end{table}

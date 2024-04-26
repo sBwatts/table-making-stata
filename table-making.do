@@ -1,11 +1,9 @@
 *************************************************************
-// Project: Table making .do walkthrough
+// Project: Table making using estout/esttab (excel/word/latex)
 // Author: Seth Watts
 *************************************************************
 **# packages
 ssc install estout
-net install desctable, from("https://tdmize.github.io/data/desctable")
-ssc install outreg2
 
 **** set a global for yourself so you can call it in the table commands - if you don't set a global I will think less of you (just kidding..) :)
 
@@ -48,14 +46,14 @@ esttab, cells("mean(fmt(%6.2fc)) sd(fmt(%6.2fc)) min max") noobs /*no model obse
 *
 *
 *
-* word export
+**# descriptive stats -- Word export
 esttab using "$prac/estab_prac1.rtf", replace ///
 	cells("mean(fmt(%6.2fc)) sd(fmt(%6.2fc)) min max") noobs /*no model observations*/ nostar /*no asterisks*/ nonote /*no note under table*/ nonumber /*no model number*/ label /*calls the var label instead of name: PROPERLY LABEL VARS*/ ///
 	title("Table 1. Summary Statistics")
 *
 *
 *
-* excel export
+**# descriptive stats -- Excel export
 esttab using "$prac/estab_prac1.csv", replace ///
 	cells("mean(fmt(%6.2fc)) sd(fmt(%6.2fc)) min max") noobs nostar nonote nonumber label ///
 	title("Table 1. Summary Statistics")
@@ -66,8 +64,9 @@ esttab using "$prac/estab_prac1.csv", replace ///
 esttab, cells("mean(fmt(%6.2f)) sd(fmt(%6.2fc)) min max") noobs nostar nonote nonumber label ///
 	title("Table 1. Summary Statistics") refcat(price "Dependent Variable" foreign "Independent Variable" mpg "Controls", nolabel) 
 *
+* note that you call the variable that you want the header to go above. The ', nolabel' option ensures the ref category/header does not have a row of data
 *	
-*	
+*
 * example with percentages for dummy var
 est clear
 estpost tabstat foreign, c(stat) stat(mean count)		// mean and count example; percentage for dummy var
@@ -78,12 +77,12 @@ esttab, cells("Percent(fmt(2)) Count") noobs /*no model observations*/ nostar /*
 	title("Table 1. Summary Statistics")
 *
 *		
-*
-* note that you call the variable that you want the header to go above. The ', nolabel' option ensures the ref category/header does not have a row of data
 *	
 * there is a lot of flexbibility in this command suite --- too much to go through here: for instance, take away 'nonote' add 'addnote(n = #)', you can alter the title in the command, the column headers, shift the presentation of the estimates (so say, mean over (sd)), you can also group the stats -- see below
 *
 * also, as you can see below, it is nice because you can preview the table in stata before exporting it to an rtf, csv, or tex file
+*
+*
 * example with grouping the stats
 est clear 
 estpost tabstat price mpg trunk, by(foreign) ///
@@ -91,18 +90,6 @@ estpost tabstat price mpg trunk, by(foreign) ///
 *
 esttab, main(mean) aux(sd) nostar unstack ///
 	noobs nomtitle nonumber addnote(n = 74) /*adds note under the table*/
-*
-*
-*
-**# desctable command
-* resource: https://www.trentonmize.com/software/desctable
-* admittedly, I'm less familiar with this command but here we go
-
-desctable price foreign mpg trunk, ///
-	filename($prac/desctable_prac1)
-	
-* this command seems nice for quick stats, there is minimal flexibility, however. For instance, you can add a note to the bottom of the table but it seems as if the N = ## at the top of the table will have to be edited/removed while formatting. 
-*
 *
 *
 **# regression models and tables
@@ -122,14 +109,14 @@ esttab, b(3) se(3) r2(3) /*limiting to 3 decimals*/ label /*var label*/ star(* 0
 *
 *
 *
-* word export 
+**# regression -- Word export 
 esttab using "$prac/estab_prac2.rtf", replace ///
 	b(3) se(3) r2(3) star(* 0.10 ** 0.05 *** 0.01) nonumber /*no model number*/ label /*calls the var label instead of name: PROPERLY LABEL VARS*/ ///
 	title("Table 2. OLS regression model")
 *
 *
 *
-*excel export
+**# regression -- Excel export
 esttab using "$prac/estab_prac2.csv", replace ///
 	b(3) se(3) r2(3) star(* 0.10 ** 0.05 *** 0.01) nonumber label ///
 	title("Table 2. OLS regression model")
@@ -167,24 +154,74 @@ esttab m1 m2, cells(b(star fmt(%9.3f)) se(par)) ///
 	nomtitle mgroups("Price", pattern(1 0))	
 *
 *
-*
-**# outreg2 command
-reg price foreign mpg trunk
-
-outreg2 using "$prac/outreg_prac1.xls", dec(3) alpha(0.05, 0.01) symbol(*,**) label replace
-
-reg price foreign mpg trunk weight
-
-outreg2 using "$prac/outreg_prac1.xls", dec(3) alpha(0.05, 0.01) symbol(*,**) append		// this is for appending models into one table
-*
-* the best way to use outreg2 is to export to xls file, then create a table shell in a separate excel file to then copy your results into. That way you have an unedited export file that you can edit only through your stata commands and a file you edit for table formatting purposes
-*
-* Personally, I have come to enjoy the estout command suite for all table making purposes. (1) It's very flexible, (2) it can provide tables for anything, (3) can export to rtf, csv, html, tex files, and (4) you can preview in stata. It does have a slightly steeper learning curve than the other commands but it produces some nice tables!
-*
-*
-*
 **# reminders
 * 'help command' is your best friend, as is googling the command you are struggling with.
 * I will be adding to this do file over time, so things may change and commands will be added
 * There may be - quite likely actually - more efficient ways to making tables. These are just approaches I have learned and adopted over the years that work for me.
+
+
+**#additional -- Latex 
+
+* summarize some variables
+sum price foreign mpg trunk 
+
+**# descriptive stats and tables
+*
+est clear 								// clears previous stored estimates
+estpost sum price foreign mpg trunk 	// storing the estimates of the sum var(s) command
+*
+*
+*
+esttab, cells("mean(fmt(%6.2fc)) sd(fmt(%6.2fc)) min max") noobs /*no model observations*/ nostar /*no asterisks*/ nonote /*no note under table*/nonumber /*no model number*/ label /*calls the var label instead of name: PROPERLY LABEL VARS*/ ///
+	title(\centering Summary Statistics)
+*
+**# descriptive stats -- Latex output
+esttab using "$sw/descriptive_stats1.tex", replace ///
+cells("mean(fmt(%6.2fc)) sd(fmt(%6.2fc)) min max") nonumber unstack ///
+compress nomtitle nonote noobs label collabels("Mean" "SD" "Min" "Max") ///
+addnote("n = 74") ///
+title(\centering "Summary Statistics")
+*	
+*	
+*
+**# regression models and tables
+est clear
+eststo: reg price foreign mpg trunk			// storing regression estimates
+*
+/*eststo: is a way to store estimates it could also look like:
+
+reg price foreign mpg trunk
+eststo
+
+*/
+*
+esttab, lab
+esttab, b(2) se(2) r2(3) /*limiting to 2 & 3 decimals*/ label /*var label*/ star(* 0.10 ** 0.05 *** 0.01) /*asterisks*/ nonumber /*no model #*/
+*
+**# regression -- Latex output
+esttab using "$sw/reg1.tex", replace ///
+	 b(3) se(3) r2(3) label star(* 0.05 ** 0.01 *** 0.001) ///
+	booktabs compress nonumber ///
+ title(\centering "OLS Regression Model") 
+*
+**#latex advanced options
+// Table  formatting to indent the variables by 0.25 cm
+foreach x of varlist price foreign mpg trunk {
+  local t : var label `x'
+  local t = "\hspace{0.25cm} `t'"
+  lab var `x' "`t'"
+}
+*
+est clear
+*
+eststo: reg price foreign mpg trunk	
+*
+esttab, lab
+esttab, b(2) se(2) r2(3) /*limiting to 2 & 3 decimals*/ label /*var label*/ star(* 0.05 ** 0.01 *** 0.001) /*asterisks*/ nonumber /*no model #*/
+*
+esttab using "$sw/reg2.tex", replace ///
+refcat(foreign "\emph{Independent Variable}" mpg "\vspace{0.1em} \emph{Control Variables}", nolab) ///
+	 b(2) se(2) r2(3) label star(* 0.05 ** 0.01 *** 0.001) ///
+	booktabs compress nonumber ///
+ title(\centering "OLS Regression Model") 
 
